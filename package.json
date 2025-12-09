@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "autoprefixer": "^10.4.22",
+    "daisyui": "^5.5.8",
     "next": "16.0.8",
     "react": "19.2.1",
     "react-dom": "19.2.1"
