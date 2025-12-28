@@ -7,13 +7,13 @@ async function getLeads() {
   const supabase = await createClient()
   
   const { data, error } = await supabase
-    .from('leads')
+    .from('Leads')
     .select('*')
     .order('created_at', { ascending: false })
     .limit(50)
   
   if (error) {
-    console.error('Error fetching leads:', error)
+    console.log('Error fetching leads:', error)
     return []
   }
   

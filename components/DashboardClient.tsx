@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import type { Lead, DashboardStats } from '@/types/leads'
-import StatsCards from './StatsCards'
-import LeadsList from './LeadsList'
+import StatsCards from '@/components/StatsCards'
+import LeadsList from '@/components/LeadsList'
 
 interface Props {
   initialLeads: Lead[]
@@ -22,7 +22,7 @@ export default function DashboardClient({ initialLeads }: Props) {
         {
           event: '*',
           schema: 'public',
-          table: 'leads',
+          table: 'Leads',
         },
         (payload) => {
           if (payload.eventType === 'INSERT') {

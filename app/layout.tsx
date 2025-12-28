@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="font-display antialiased">
+      <body>
         <header className="flex justify-center py-4 bg-background">
           <div className="block dark:hidden">
             <Image
