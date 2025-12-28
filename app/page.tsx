@@ -1,10 +1,27 @@
-import Image from "next/image";
+import { createClient } from '@/lib/supabase/server'
+import DashboardClient from '@/components/DashboardClient'
 
-export default function Home() {
-  return (
-    <div >
-      <button className="btn btn-primary">Prime Target</button>
-      <h1 className="shine">Lead Forge</h1>
-    </div>
-  );
+export const dynamic = 'force-dynamic'
+
+async function getLeads() {
+  const supabase = await createClient()
+  
+  const { data, error } = await supabase
+    .from('leads')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(50)
+  
+  if (error) {
+    console.error('Error fetching leads:', error)
+    return []
+  }
+  
+  return data
+}
+
+export default async function Dashboard() {
+  const initialLeads = await getLeads()
+  
+  return <DashboardClient initialLeads={initialLeads} />
 }
