@@ -59,7 +59,7 @@ export default function DashboardClient({ initialLeads }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-background p-6">
+    <div className="min-h-[75vh] bg-background p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         <h1 className="text-4xl font-bold text-foreground">Lead Forge</h1>
         <StatsCards stats={stats} />

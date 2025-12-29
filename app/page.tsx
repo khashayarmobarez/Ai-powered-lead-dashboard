@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import DashboardClient from '@/components/DashboardClient'
+import LeadForm from '@/components/LeadForm'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,5 +24,10 @@ async function getLeads() {
 export default async function Dashboard() {
   const initialLeads = await getLeads()
   
-  return <DashboardClient initialLeads={initialLeads} />
+  return (
+    <div className=' mb-4'>
+      <DashboardClient initialLeads={initialLeads} />
+      <LeadForm />
+    </div>
+  )
 }

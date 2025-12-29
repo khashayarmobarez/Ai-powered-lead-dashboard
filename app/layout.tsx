@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import "./globals.css";
+import lightLogo from '@/public/images/logo-light.png'
+import darkLogo from '@/public/images/logo-dark.png'
+
 
 export const metadata: Metadata = {
   title: "AI-Powered Lead Dashboard",
@@ -18,7 +21,7 @@ export default function RootLayout({
         <header className="flex justify-center py-4 bg-background">
           <div className="block dark:hidden">
             <Image
-              src="/images/logo-dark.png"
+              src={lightLogo}
               alt="Mobarrez Logo - Light Mode"
               width={150}
               height={50}
@@ -26,7 +29,7 @@ export default function RootLayout({
           </div>
           <div className="hidden dark:block">
             <Image
-              src="/images/logo-light.png"
+              src={darkLogo}
               alt="Mobarrez Logo - Dark Mode"
               width={150}
               height={50}
