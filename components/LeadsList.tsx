@@ -6,9 +6,10 @@ import EditLeadModal from './EditLeadModal'
 
 interface Props {
   leads: Lead[]
+  onRefresh: () => void
 }
 
-export default function LeadsList({ leads }: Props) {
+export default function LeadsList({ leads, onRefresh }: Props) {
   const [editingLead, setEditingLead] = useState<Lead | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
 
@@ -22,7 +23,9 @@ export default function LeadsList({ leads }: Props) {
         method: 'DELETE',
       })
 
-      if (!response.ok) {
+      if (response.ok) {
+        onRefresh()
+      } else {
         alert('Failed to delete lead')
       }
     } catch (error) {

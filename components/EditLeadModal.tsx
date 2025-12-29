@@ -7,9 +7,10 @@ interface Props {
   lead: Lead
   onClose: () => void
   onSuccess: () => void
+  onRefresh: () => void
 }
 
-export default function EditLeadModal({ lead, onClose, onSuccess }: Props) {
+export default function EditLeadModal({ lead, onClose, onSuccess, onRefresh }: Props) {
   const [formData, setFormData] = useState({
     name: lead.name || '',
     email: lead.email,
@@ -39,6 +40,7 @@ export default function EditLeadModal({ lead, onClose, onSuccess }: Props) {
       if (response.ok) {
         onSuccess()
         onClose()
+        onRefresh()
       } else {
         setError(data.error || 'Failed to update lead')
       }
