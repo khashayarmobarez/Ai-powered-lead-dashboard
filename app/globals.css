@@ -166,3 +166,31 @@ body {
   border: 1px solid var(--error-color);
   color: var(--error-color);
 }
+
+.select-bordered {
+  border: 1px solid color-mix(in srgb, var(--foreground) 20%, transparent);
+  background: var(--background);
+  color: var(--foreground);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+}
+
+.select-bordered:focus {
+  border-color: var(--accent-color);
+  outline: none;
+}
+
+.btn-outline {
+  border: 1px solid var(--foreground);
+  background: transparent;
+  color: var(--foreground);
+}
+
+.btn-outline:hover {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.btn-ghost:hover {
+  background: color-mix(in srgb, var(--foreground) 10%, transparent);
+}
