@@ -38,9 +38,9 @@ export default function EditLeadModal({ lead, onClose, onSuccess, onRefresh }: P
       const data = await response.json()
 
       if (response.ok) {
+        onRefresh()
         onSuccess()
         onClose()
-        onRefresh()
       } else {
         setError(data.error || 'Failed to update lead')
       }

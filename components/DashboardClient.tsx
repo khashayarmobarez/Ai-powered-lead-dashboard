@@ -52,7 +52,7 @@ export default function DashboardClient({ initialLeads }: Props) {
             setLeads((prev) =>
               prev.map((lead) =>
                 lead.id === payload.new.id ? (payload.new as Lead) : lead
-              )
+              ) 
             )
           } else if (payload.eventType === 'DELETE') {
             setLeads((prev) => prev.filter((lead) => lead.id !== payload.old.id))

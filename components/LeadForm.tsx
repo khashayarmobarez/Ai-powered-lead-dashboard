@@ -1,8 +1,12 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function LeadForm() {
+
+  const router =  useRouter()
+
   const [formData, setFormData] = useState({
     email: '',
     name: '',
@@ -31,6 +35,7 @@ export default function LeadForm() {
         setStatus('success')
         setMessage('Lead captured! Check the dashboard.')
         setFormData({ email: '', name: '', company: '' })
+        router.refresh()
       } else {
         setStatus('error')
         setMessage(data.error || 'Something went wrong')

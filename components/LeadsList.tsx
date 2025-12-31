@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import type { Lead } from '@/types/leads'
-import EditLeadModal from './EditLeadModal'
+import EditLeadModal from '@/components/EditLeadModal'
 
 interface Props {
   leads: Lead[]
@@ -119,6 +119,7 @@ export default function LeadsList({ leads, onRefresh }: Props) {
 
       {editingLead && (
         <EditLeadModal
+          onRefresh={onRefresh}
           lead={editingLead}
           onClose={() => setEditingLead(null)}
           onSuccess={() => setEditingLead(null)}
