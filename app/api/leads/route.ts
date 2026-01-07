@@ -3,54 +3,59 @@ import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json()
-    const { email, name, company, source } = body
+    const body = await request.json();
+    const { email, name, company, source = 'form' } = body;
 
-    // Validate required fields
     if (!email) {
       return NextResponse.json(
         { error: 'Email is required' },
         { status: 400 }
-      )
+      );
     }
 
-    const supabase = await createClient()
+    const supabase = await createClient();
 
     // Insert lead into Supabase
     const { data, error } = await supabase
       .from('Leads')
-      .insert({
-        email,
-        name: name || null,
-        company: company || null,
-        source: source || 'form',
-        status: 'new',
-      })
+      .insert([
+        {
+          email,
+          name,
+          company,
+          source,
+          status: 'new',
+        },
+      ])
       .select()
-      .single()
+      .single();
 
-    if (error) {
-      console.error('Supabase insert error:', error)
-      return NextResponse.json(
-        { error: 'Failed to save lead' },
-        { status: 500 }
-      )
+    if (error) throw error;
+
+    // Trigger n8n webhook for enrichment
+    if (process.env.N8N_WEBHOOK_URL && data) {
+      fetch(process.env.N8N_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: data.id,           // ← Must match your webhook pinned data structure
+          email: data.email,
+          name: data.name,
+          company: data.company,
+        }),
+      }).catch((err) => {
+        console.error('n8n webhook error:', err);
+        // Don't throw - enrichment failure shouldn't break lead creation
+      });
     }
 
-    // TODO: Trigger n8n webhook here when ready
-    // await fetch(process.env.N8N_WEBHOOK_URL!, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(data),
-    // })
-
-    return NextResponse.json({ success: true, Lead: data })
+    return NextResponse.json(data, { status: 201 });
   } catch (error) {
-    console.error('API error:', error)
+    console.error('Error creating lead:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to create lead' , errorDetails: error },
       { status: 500 }
-    )
+    );
   }
 }
 
@@ -101,38 +106,38 @@ export async function PATCH(request: Request) {
 
 
 export async function DELETE(request: Request) {
-try {
-    const { searchParams } = new URL(request.url)
-    const id = searchParams.get('id')
+  try {
+      const { searchParams } = new URL(request.url)
+      const id = searchParams.get('id')
 
-    if (!id) {
-    return NextResponse.json(
-        { error: 'Lead ID is required' },
-        { status: 400 }
-    )
-    }
+      if (!id) {
+      return NextResponse.json(
+          { error: 'Lead ID is required' },
+          { status: 400 }
+      )
+      }
 
-    const supabase = await createClient()
+      const supabase = await createClient()
 
-    const { error } = await supabase
-    .from('Leads')
-    .delete()
-    .eq('id', id)
+      const { error } = await supabase
+      .from('Leads')
+      .delete()
+      .eq('id', id)
 
-    if (error) {
-    console.error('Supabase delete error:', error)
-    return NextResponse.json(
-        { error: 'Failed to delete lead' },
-        { status: 500 }
-    )
-    }
+      if (error) {
+      console.error('Supabase delete error:', error)
+      return NextResponse.json(
+          { error: 'Failed to delete lead' },
+          { status: 500 }
+      )
+      }
 
-    return NextResponse.json({ success: true })
-} catch (error) {
-    console.error('API error:', error)
-    return NextResponse.json(
-    { error: 'Internal server error' },
-    { status: 500 }
-    )
-}
+      return NextResponse.json({ success: true })
+  } catch (error) {
+      console.error('API error:', error)
+      return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+      )
+  }
 }
